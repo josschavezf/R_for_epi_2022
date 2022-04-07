@@ -1,1 +1,3 @@
-# R_for_epi
+# Course R for epidemiology
+
+
