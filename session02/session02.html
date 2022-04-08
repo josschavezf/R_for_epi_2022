@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction to coding with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Joselyn Chavez" />
+    <meta name="date" content="2022-04-12" />
+    <script src="session02_files/header-attrs-2.13/header-attrs.js"></script>
+    <script src="session02_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="session02_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="session02_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link rel="stylesheet" href="epi.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction to coding with R
+## Part I
+### Joselyn Chavez
+### 04/12/2022
+
+---
+
+
+
+# Data structures in R
+
+- Vectors
+- Matrices
+- Data frames
+- Lists
+- Functions
+
+---
+class: chapter-slide
+
+# Vectors
+
+---
+
+# Creating a vector
+
+## Using the assignment operator
+
+For one value
+
+
+```r
+my_vector &lt;- 10
+my_vector &lt;- "a"
+```
+
+---
+## Using the combine function
+
+For two or more values
+
+
+```r
+my_vector &lt;- c(1,10,25,30)
+my_vector
+```
+
+```
+## [1]  1 10 25 30
+```
+
+```r
+my_vector &lt;- c("a","b","c")
+my_vector
+```
+
+```
+## [1] "a" "b" "c"
+```
+
+---
+## Using the seq() function
+
+
+```r
+my_vector &lt;- seq(1:10)
+my_vector
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+my_vector &lt;- seq(from = 0, to = 10, by = 2)
+my_vector
+```
+
+```
+## [1]  0  2  4  6  8 10
+```
+
+---
+# Vector features
+
+- Vectors have only one dimension (length)
+
+
+```r
+my_vector &lt;- c(1,2,3,4)
+length(my_vector)
+```
+
+```
+## [1] 4
+```
+
+---
+- All vector components must be the same type
+
+    - Numeric
+    - Integer
+    - Double
+    - Character
+    - Factor
+    - Logical
+
+---
+
+- Numeric
+
+```r
+x_num &lt;- c(1, 2, 3)
+class(x_num)
+```
+
+```
+## [1] "numeric"
+```
+--
+
+- Integer
+
+```r
+x_int &lt;- c(1L, 2L, 3L)
+class(x_int)
+```
+
+```
+## [1] "integer"
+```
+---
+
+- Double
+
+```r
+x_dbl &lt;- c(1, 2.5, 3.1)
+typeof(x_dbl)
+```
+
+```
+## [1] "double"
+```
+--
+
+- Character
+
+
+```r
+x_chr &lt;- c("a", "b", "c")
+class(x_chr)
+```
+
+```
+## [1] "character"
+```
+---
+
+- Factor
+
+```r
+x_fct &lt;- factor("a","b","c")
+class(x_fct)
+```
+
+```
+## [1] "factor"
+```
+--
+
+- Logical
+
+```r
+x_log &lt;- c(TRUE, FALSE, TRUE)
+class(x_log)
+```
+
+```
+## [1] "logical"
+```
+
+---
+
+- R finds a way to unify data type when there is more than one per vector
+
+
+```r
+x &lt;- c(1, "a", TRUE)
+x
+```
+
+```
+## [1] "1"    "a"    "TRUE"
+```
+
+```r
+class(x)
+```
+
+```
+## [1] "character"
+```
+
+---
+# Missing values
+
+- NA
+
+
+```r
+x &lt;- c(1, "a", TRUE, NA)
+x
+```
+
+```
+## [1] "1"    "a"    "TRUE" NA
+```
+
+- NaN
+
+
+```r
+x &lt;- c(10, -1, NA)
+log(x)
+```
+
+```
+## [1] 2.302585      NaN       NA
+```
+
+---
+class: chapter-slide
+
+# How to access vector elements?
+
+---
+## Using integer as index
+
+Vector index in R starts from 1
+
+
+```r
+x &lt;- c(1,2,3,4,5)
+x
+```
+
+```
+## [1] 1 2 3 4 5
+```
+
+```r
+x[3] # Extract the third element
+```
+
+```
+## [1] 3
+```
+
+---
+
+```r
+x &lt;- c(1,2,3,4,5)
+
+# Extract index from 3 to 5
+x[3:5]
+```
+
+```
+## [1] 3 4 5
+```
+
+--
+
+```r
+x &lt;- c("a","b","c","d","e")
+
+# Extract index 2 and 5
+x[c(2,5)] 
+```
+
+```
+## [1] "b" "e"
+```
+---
+
+## Using the name as index
+
+
+```r
+x &lt;- c(1,3,10)
+names(x)
+```
+
+```
+## NULL
+```
+--
+
+
+```r
+x &lt;- c("first" = 1, "second" = 3, "third" = 10)
+x
+```
+
+```
+##  first second  third 
+##      1      3     10
+```
+
+```r
+names(x)
+```
+
+```
+## [1] "first"  "second" "third"
+```
+
+---
+
+
+```r
+x &lt;- c(1,3,10)
+
+names(x) &lt;- c("first", "second", "third")
+x
+```
+
+```
+##  first second  third 
+##      1      3     10
+```
+
+--
+
+```r
+x["second"]
+```
+
+```
+## second 
+##      3
+```
+
+```r
+x[c("first","third")]
+```
+
+```
+## first third 
+##     1    10
+```
+
+---
+
+## Using logical evaluation as index
+
+
+```r
+x &lt;- seq(1:10)
+x
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+x &lt; 5
+```
+
+```
+##  [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE
+```
+
+```r
+x[x &lt; 5]
+```
+
+```
+## [1] 1 2 3 4
+```
+
+---
+
+
+```r
+x &lt;- c("a","a","b","c","c","c")
+
+x == "c"
+```
+
+```
+## [1] FALSE FALSE FALSE  TRUE  TRUE  TRUE
+```
+
+```r
+x[x == "c"]
+```
+
+```
+## [1] "c" "c" "c"
+```
+
+---
+
+## Excercise
+
+Using the vector:
+
+```r
+fruits &lt;- c("apples" = 1, "cherries" = 10 , "mangos" = 3) 
+```
+
+Extract the number of cherries using 1) the integer index, 2) the name, and 3) a logical evaluation
+
+---
+
+class: chapter-slide
+
+# How to modify a vector?
+
+---
+
+- Adding a new element
+
+
+```r
+x &lt;- c("a","b","c")
+x
+```
+
+```
+## [1] "a" "b" "c"
+```
+
+```r
+x[4] &lt;- "d"
+x
+```
+
+```
+## [1] "a" "b" "c" "d"
+```
+
+---
+
+- Removing an element
+
+
+```r
+x
+```
+
+```
+## [1] "a" "b" "c" "d"
+```
+
+```r
+x[-2]
+```
+
+```
+## [1] "a" "c" "d"
+```
+
+```r
+x &lt;- x[-2]
+x
+```
+
+```
+## [1] "a" "c" "d"
+```
+
+---
+
+- Replacing an element
+
+
+```r
+x
+```
+
+```
+## [1] "a" "c" "d"
+```
+
+```r
+x[x == "d"] &lt;- "e"
+x
+```
+
+```
+## [1] "a" "c" "e"
+```
+
+```r
+x[1] &lt;- "m"
+x
+```
+
+```
+## [1] "m" "c" "e"
+```
+
+---
+
+- Selecting and replacing elements using negative conditional
+
+
+```r
+x &lt;- c("a","a","b","c","c","c")
+x[x != "c"] 
+```
+
+```
+## [1] "a" "a" "b"
+```
+
+```r
+x[x != "c"] &lt;- "e"
+x
+```
+
+```
+## [1] "e" "e" "e" "c" "c" "c"
+```
+
+---
+
+## Excercise
+
+Using the vector:
+
+```r
+fruits &lt;- c("apples" = 1, "cherries" = 10 , "mangos" = 7) 
+```
+
+- Add a new fruit to the vector
+- Select all fruits with values bigger than 5
+- Replace the apples number
+
+---
+class: chapter-slide
+
+# Operations with vectors
+
+---
+# Arithmetic operations
+
+
+```r
+x &lt;- c(1,2,3,4,5)
+x + 1
+```
+
+```
+## [1] 2 3 4 5 6
+```
+
+```r
+x*3
+```
+
+```
+## [1]  3  6  9 12 15
+```
+
+```r
+log10(x)
+```
+
+```
+## [1] 0.0000000 0.3010300 0.4771213 0.6020600 0.6989700
+```
+
+---
+# Operations between vectors
+
+
+```r
+x &lt;- c(1,2,3,4,5)
+y &lt;- c(6,7,8,9,10)
+x + y
+```
+
+```
+## [1]  7  9 11 13 15
+```
+
+--
+
+
+```r
+x &lt;- c(1,2,3,4,5)
+y &lt;- c(1,2)
+x + y
+```
+
+```
+## Warning in x + y: longer object length is not a multiple of shorter object
+## length
+```
+
+```
+## [1] 2 4 4 6 6
+```
+
+---
+class: chapter-slide
+
+# Matrices
+
+---
+
+# Creating a matrix
+
+Matrices are objects with elements arranged in a two-dimensional layout.
+
+
+```r
+matrix(data = 1:12, nrow = 4, ncol = 3)
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    5    9
+## [2,]    2    6   10
+## [3,]    3    7   11
+## [4,]    4    8   12
+```
+
+By deafult, elements are arranged by column
+
+---
+
+Arranging the matrix by row
+
+
+```r
+matrix(data = 1:12, nrow = 4, ncol = 3, byrow = TRUE)
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    4    5    6
+## [3,]    7    8    9
+## [4,]   10   11   12
+```
+
+---
+
+# Properties of matrices
+
+- nrow
+
+
+```r
+my_matrix &lt;- matrix(data = 1:12, nrow = 4, ncol = 3)
+nrow(my_matrix)
+```
+
+```
+## [1] 4
+```
+
+- ncol
+
+
+```r
+ncol(my_matrix)
+```
+
+```
+## [1] 3
+```
+
+---
+
+- dim
+
+
+```r
+dim(my_matrix)
+```
+
+```
+## [1] 4 3
+```
+
+- rownames
+
+
+```r
+rownames(my_matrix)
+```
+
+```
+## NULL
+```
+
+- colnames
+
+
+```r
+colnames(my_matrix)
+```
+
+```
+## NULL
+```
+
+---
+
+Assigning rownames and colnames
+
+
+```r
+rownames(my_matrix) &lt;- c("A","B","C","D")
+colnames(my_matrix) &lt;- c("a","b","c")
+
+my_matrix
+```
+
+```
+##   a b  c
+## A 1 5  9
+## B 2 6 10
+## C 3 7 11
+## D 4 8 12
+```
+
+---
+class: chapter-slide
+
+# How to access matrix elements?
+
+---
+
+# Using row and column index
+
+Syntaxis: matrix[row,column]
+
+
+```r
+my_matrix
+```
+
+```
+##   a b  c
+## A 1 5  9
+## B 2 6 10
+## C 3 7 11
+## D 4 8 12
+```
+
+```r
+my_matrix[2,3]
+```
+
+```
+## [1] 10
+```
+
+---
+
+Select rows 1 to 2 from column 3
+
+
+```r
+my_matrix[1:2,3]
+```
+
+```
+##  A  B 
+##  9 10
+```
+
+Select rows 1 to 2 from columns 2 to 3
+
+
+```r
+my_matrix[1:2,2:3]
+```
+
+```
+##   b  c
+## A 5  9
+## B 6 10
+```
+
+---
+
+Select all rows from column 2
+
+
+```r
+my_matrix[,2]
+```
+
+```
+## A B C D 
+## 5 6 7 8
+```
+
+Select all columns from row 2
+
+
+```r
+my_matrix[2,]
+```
+
+```
+##  a  b  c 
+##  2  6 10
+```
+
+---
+class: chapter-slide
+
+# Operations with matrices
+
+---
+
+# Arithmetic operations
+
+
+```r
+my_matrix + 10
+```
+
+```
+##    a  b  c
+## A 11 15 19
+## B 12 16 20
+## C 13 17 21
+## D 14 18 22
+```
+
+```r
+my_matrix * 2
+```
+
+```
+##   a  b  c
+## A 2 10 18
+## B 4 12 20
+## C 6 14 22
+## D 8 16 24
+```
+
+---
+
+# Operations with matrices
+
+
+```r
+matrix1 &lt;- matrix(1:6, nrow = 2, ncol = 3)
+matrix2 &lt;- matrix(7:12, nrow = 2, ncol = 3)
+```
+
+.pull-left[
+
+```r
+matrix1
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    3    5
+## [2,]    2    4    6
+```
+
+```r
+matrix2
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    7    9   11
+## [2,]    8   10   12
+```
+]
+.pull-right[
+
+```r
+matrix1 + matrix2
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    8   12   16
+## [2,]   10   14   18
+```
+]
+
+---
+
+.pull-left[&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+.center[
+# Thanks!
+]
+]
+
+.pull-right[&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+&lt;img src="img/thanks.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+.pull-right[Ilustration by Allison Horst]
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"self-contained": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
