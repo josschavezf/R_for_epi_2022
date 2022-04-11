@@ -199,9 +199,8 @@ names(x)
 --
 
 ```{r}
-x <- c("first" = 1, "second" = 3, "third" = 10)
+x <- c("first"= 1,"second"=3,"third"=10)
 x
-
 names(x)
 ```
 
@@ -251,7 +250,9 @@ x[x == "c"]
 
 Using the vector:
 ```{r}
-fruits <- c("apples" = 1, "cherries" = 10 , "mangos" = 3) 
+fruits <- c("apples" = 1, 
+            "cherries" = 10,
+            "mangos" = 3) 
 ```
 
 Extract the number of cherries using 1) the integer index, 2) the name, and 3) a logical evaluation
@@ -314,7 +315,9 @@ x
 
 Using the vector:
 ```{r}
-fruits <- c("apples" = 1, "cherries" = 10 , "mangos" = 7) 
+fruits <- c("apples" = 1, 
+            "cherries" = 10,
+            "mangos" = 7) 
 ```
 
 - Add a new fruit to the vector
@@ -375,7 +378,9 @@ By deafult, elements are arranged by column
 Arranging the matrix by row
 
 ```{r}
-matrix(data = 1:12, nrow = 4, ncol = 3, byrow = TRUE)
+matrix(data = 1:12, 
+       nrow = 4, ncol = 3, 
+       byrow = TRUE)
 ```
 
 ---
@@ -385,7 +390,8 @@ matrix(data = 1:12, nrow = 4, ncol = 3, byrow = TRUE)
 - nrow
 
 ```{r}
-my_matrix <- matrix(data = 1:12, nrow = 4, ncol = 3)
+my_matrix <- matrix(data = 1:12, 
+                    nrow = 4, ncol = 3)
 nrow(my_matrix)
 ```
 
