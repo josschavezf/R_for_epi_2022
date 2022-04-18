@@ -1,0 +1,353 @@
+---
+title: "Introduction to coding with R"
+subtitle: "Part II"
+author: "Joselyn Chavez"
+date: "04/19/2022"
+output:
+  xaringan::moon_reader:
+    css: ["epi.css"]
+    nature:
+      ratio: '16:9'
+      self-contained: true
+
+---
+```{r xaringanExtra-clipboard, echo=FALSE}
+xaringanExtra::use_clipboard()
+```
+
+# Let's recap
+
+- Vectors
+- One dimension
+- All vector components must be the same type
+- R finds a way to unify data type
+- Define a vector with c()
+- Access vector elements using integer index, name or logical evaluation
+
+---
+
+# Data structures in R
+
+- Vectors
+- Matrices
+- Data frames
+- Lists
+- Functions
+
+---
+class: chapter-slide
+
+# Vectors (Part II)
+
+---
+## How to modify a vector?
+
+- Adding a new element
+
+```{r}
+x <- c("a","b","c")
+x
+
+x[4] <- "d"
+x
+```
+
+---
+
+- Removing an element
+
+```{r}
+x
+x[-2]
+x <- x[-2]
+x
+```
+
+---
+## Excercise
+
+Using the vector:
+```{r}
+fruits <- c("apples" = 1, 
+            "cherries" = 10,
+            "mangos" = 7) 
+```
+
+- Add a new fruit to the vector
+- Remove the cherries
+
+---
+
+- Replacing an element by index
+
+```{r}
+x
+x[1] <- "m"
+x
+```
+
+---
+- Replacing an element by logical evaluation
+
+```{r}
+x
+x[x == "d"] <- "e"
+x
+```
+
+---
+
+## Excercise
+
+Using the vector:
+```{r}
+fruits <- c("apples" = 1, 
+            "cherries" = 10,
+            "mangos" = 7) 
+```
+
+- Select all fruits with values bigger than 5
+- Replace the apples number with 4
+
+---
+class: chapter-slide
+
+# Matrices
+
+---
+
+# Creating a matrix
+
+Matrices are objects with elements arranged in a two-dimensional layout.
+
+```{r}
+my_matrix <- matrix(data = 1:12, nrow = 4)
+my_matrix
+```
+
+- rows and columns
+- All elements must be the same type
+
+---
+class: chapter-slide
+
+# Operations with matrices
+
+---
+
+# Arithmetic operations
+
+```{r}
+my_matrix + 10
+my_matrix * 2
+```
+
+---
+
+# Operations with matrices
+
+```{r}
+matrix1 <- matrix(1:6, nrow = 2, ncol = 3)
+matrix2 <- matrix(7:12, nrow = 2, ncol = 3)
+```
+
+.pull-left[
+```{r}
+matrix1
+matrix2
+```
+]
+.pull-right[
+```{r}
+matrix1 + matrix2
+```
+]
+
+---
+class: chapter-slide
+
+# Data Frames
+
+---
+
+# What is a data frame?
+
+- Two-dimensional arranged data (tables)
+- rows and columns
+- All columns must be the same length
+- Columns can have different type of data
+- All components in the column must be the same type (vector)
+
+---
+# Creating a data frame
+
+```{r}
+fruits <- data.frame(
+  name = c("apples","berries","mangos","bananas"),  
+  number = c(1, 10, 7, 2),
+  edible_shell = c(TRUE,TRUE,FALSE,FALSE) )
+fruits
+```
+
+---
+
+# Properties of data frames
+
+- nrow
+
+```{r}
+nrow(fruits)
+```
+
+- ncol
+
+```{r}
+ncol(fruits)
+```
+---
+
+- dim
+
+```{r}
+dim(fruits)
+```
+
+---
+
+- rownames
+
+```{r}
+rownames(fruits)
+```
+
+- colnames
+
+```{r}
+colnames(fruits)
+```
+
+---
+# Practice excercise
+
+Create a data frame (patients) that contains the following information:
+
+```{r, echo=FALSE}
+patients <- data.frame(first_name = c("Ava","Noah","Olivia"), 
+                       last_name =  c("Smith", "Johnson", "Williams" ),
+                       age = c(65, 20, 47),
+                       co_morbidity = c(TRUE, FALSE, FALSE)
+)
+patients
+```
+
+- How many rows and columns does the data frame have?
+- Print the columns names
+
+---
+class: chapter-slide
+
+# How to access data frame elements?
+
+---
+
+# Using row and column index
+
+Syntaxis: df[row,column]
+
+```{r}
+fruits
+fruits[2,3]
+```
+
+---
+
+Select rows 1 to 2 from column 3
+
+```{r}
+fruits[1:2,3]
+```
+
+---
+# Your turn!
+
+Using the patients data frame 
+
+```{r, echo=FALSE}
+patients <- data.frame(first_name = c("Ava","Noah","Olivia"), 
+                       last_name =  c("Smith", "Johnson", "Williams" ),
+                       age = c(65, 20, 47),
+                       co_morbidity = c(TRUE, FALSE, FALSE)
+)
+patients
+```
+
+- Extract the last name and age from Ava and Noah 
+
+---
+
+Select all rows from column 2
+
+```{r}
+my_matrix[,2]
+```
+
+Select all columns from row 2
+
+```{r}
+my_matrix[2,]
+```
+
+---
+# Your turn!
+
+Using the patients data frame 
+
+```{r, echo=FALSE}
+patients <- data.frame(first_name = c("Ava","Noah","Olivia"), 
+                       last_name =  c("Smith", "Johnson", "Williams" ),
+                       age = c(65, 20, 47),
+                       co_morbidity = c(TRUE, FALSE, FALSE)
+)
+patients
+```
+
+- Extract all the information (columns) from Olivia.
+- Extract the age from all patients
+
+---
+class: chapter-slide
+
+# Lists
+
+---
+
+# What is a list?
+
+- A collection of like or unlike objects
+- Each object can have different dimensions
+---
+
+```{r}
+list(a_number = 15,
+     fruits = data.frame(name = c("apples",
+                                  "mangos"),
+                         number = c(3,10)),
+     my_matrix = matrix(1:6, nrow = 2)
+)
+```
+
+---
+
+.pull-left[<br><br><br><br><br><br><br>
+.center[
+# Thanks!
+]
+]
+
+.pull-right[<br><br><br><br>
+```{r,echo=FALSE,out.width='100%',fig.align='center'}
+knitr::include_graphics("img/thanks.png")
+```
+
+.pull-right[Ilustration by Allison Horst]
+]
