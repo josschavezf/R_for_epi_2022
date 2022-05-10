@@ -1,0 +1,231 @@
+---
+title: "Data transformation"
+subtitle: "Summarising and joining datasets"
+author: "Joselyn Chavez"
+date: "05/10/2022"
+output:
+  xaringan::moon_reader:
+    css: ["epi.css"]
+    nature:
+      ratio: '16:9'
+      self-contained: true
+
+---
+```{r xaringanExtra-clipboard, echo=FALSE}
+xaringanExtra::use_clipboard()
+```
+
+# Let's recap
+
+- **tibbles**
+- **Import** and **export** tibbles
+- **filter** data by row
+- **select** columns (variables)
+- **pivot longer** (columns to rows)
+- **pivot wider** (rows to columns)
+
+---
+
+class: chapter-slide
+
+# summarise()
+
+---
+## Calculate the average age of sinai covid patients
+
+```{r, message=FALSE, warning=FALSE}
+# load libraries
+library(tidyverse) 
+library(janitor)
+
+# Import data
+sinai_covid <- read_csv("sinai_covid.csv")
+
+# clean names
+sinai_covid <- sinai_covid %>% 
+  clean_names()
+```
+---
+
+```{r}
+# summarise data
+sinai_covid %>% 
+  summarise(mean(age))
+```
+
+--
+
+Even better, assign a name to the result
+```{r}
+sinai_covid %>% 
+  summarise(mean_age = mean(age))
+```
+
+---
+Calculate more than one summarise
+```{r}
+sinai_covid %>% 
+  summarise(mean_age = mean(age),
+            sd_age = sd(age))
+```
+
+
+---
+# Your turn!
+
+- Use summarise to calculate the median, max and min values of age
+
+---
+# How does summarise works?
+
+.center[Split-Apply-Combine]
+
+```{r, echo=FALSE, out.width='70%', fig.align='center'}
+knitr::include_graphics("img/split.png")
+```
+
+---
+# group_by() 
+
+Get the mean age and sd of sinai covid patients by sex
+```{r}
+sinai_covid %>% 
+  group_by(sex) %>% 
+  summarise(mean_age = mean(age),
+            sd_age = sd(age))
+```
+
+---
+# Your turn!
+
+- Calculate the median age, and average bmi of sinai covid patients by facility
+
+---
+We can use multiple variables to group by
+
+```{r}
+sinai_covid %>% 
+  group_by(facility, sex) %>% 
+  summarise(mean_age = mean(age),
+            sd_age = sd(age)) %>% 
+  head(4)
+```
+
+---
+# Let's practice!
+
+- Find the mean, median and sd of the systolic_bp by smoking status and sex
+
+---
+# count()
+
+For qualitative variables
+
+```{r}
+sinai_covid %>% 
+  count(smoking_status)
+```
+
+---
+# Excercise
+
+- How many patients have chronic kidney disease?
+
+---
+- group and count
+
+```{r}
+sinai_covid %>% 
+  group_by(facility) %>% 
+  count(smoking_status, diabetes)
+```
+
+---
+
+```{r}
+sinai_covid %>% 
+  group_by(facility) %>% 
+  filter(diabetes == 1) %>% 
+  count(smoking_status,diabetes)
+```
+
+---
+class: chapter-slide
+
+# join()
+
+---
+- Create tibble 1
+
+```{r}
+tibble1 <- sinai_covid %>%
+  filter(smoking_status %in% c("YES", "NEVER")) %>% 
+  count(smoking_status, name = "total")
+
+tibble1
+```
+
+---
+- Create tibble 2
+
+```{r, message=FALSE, warning=FALSE}
+tibble2 <- sinai_covid %>% 
+  filter(smoking_status %in% c("YES", "QUIT")) %>% 
+  group_by(smoking_status) %>% 
+  summarise(n_diabetes = sum(diabetes),
+            n_obesity = sum(obesity))
+
+tibble2
+```
+
+---
+- Join tibbles
+
+- Keep rows from left tibble
+```{r}
+left_join(tibble1, tibble2)
+```
+
+---
+- Keep rows from right tibble
+
+```{r}
+right_join(tibble1, tibble2)
+```
+
+---
+- Keep rows in common
+
+```{r}
+inner_join(tibble1, tibble2)
+```
+
+---
+- Keep all rows
+
+```{r}
+full_join(tibble1, tibble2)
+```
+
+---
+# Let's practice
+
+- Count the number of patients by ethnicity, store the result in tibble 1
+- Calculate the mean systolic_bp and mean diastolic_bp by ethnicity, store the result in tibble 2
+- Join the tibbles
+
+---
+
+.pull-left[<br><br><br><br><br><br><br>
+.center[
+# Thanks!
+]
+]
+
+.pull-right[<br><br><br><br>
+```{r,echo=FALSE,out.width='100%',fig.align='center'}
+knitr::include_graphics("img/thanks.png")
+```
+
+.pull-right[Ilustration by Allison Horst]
+]
