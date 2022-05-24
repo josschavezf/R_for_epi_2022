@@ -1,0 +1,286 @@
+---
+title: "Plotting with ggplot2"
+subtitle: "Part II"
+author: "Joselyn Chávez"
+date: "05/24/2022"
+output:
+  xaringan::moon_reader:
+    css: ["epi.css"]
+    nature:
+      #ratio: '16:9'
+      self-contained: true
+
+---
+```{r xaringanExtra-clipboard, echo=FALSE}
+xaringanExtra::use_clipboard()
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+sinai_covid <- read_csv("sinai_covid.csv")
+sinai_covid <- clean_names(sinai_covid)
+```
+
+# Plotting 3 variables (num-num-cat)
+
+```{r, out.width=350, out.height=200, fig.align='center', message=FALSE, warning=FALSE}
+ggplot(sinai_covid, 
+       aes(x = systolic_bp, 
+           y = diastolic_bp,
+           color = facility)) +
+  geom_point()
+```
+
+---
+# Plotting 3 variables (num-num-cat)
+
+```{r, out.width=350, out.height=200, fig.align='center', message=FALSE, warning=FALSE}
+ggplot(sinai_covid,
+       aes(x = systolic_bp, 
+           y = diastolic_bp,
+           shape = sex)) +
+  geom_point()
+```
+
+---
+# Let's practice
+
+- Plot the patient's age vs bmi, and separate by color and/or shape based on their smoking status
+
+---
+# Plotting 3 variables (num-num-num)
+
+```{r, out.width=350, out.height=200, fig.align='center', message=FALSE, warning=FALSE}
+ggplot(sinai_covid, 
+       aes(x = systolic_bp, 
+           y = diastolic_bp,
+           color = age)) +
+  geom_point()
+```
+
+---
+# Plotting 3 variables (cat-cat-num)
+
+```{r, out.width=300, out.height=150, fig.align='center', message=FALSE, warning=FALSE, out.height=200, eval=FALSE}
+# first create the summarized tibble
+count_smoking <- sinai_covid %>% 
+  group_by(facility) %>% 
+  count(smoking_status)
+
+# plot
+ggplot(count_smoking, 
+       aes(x = smoking_status,
+           y = facility,
+           size = n)) +
+  geom_point()
+```
+---
+
+# Plotting 3 variables (cat-cat-num)
+```{r,out.width='50%', fig.align='center', message=FALSE, warning=FALSE, echo=FALSE}
+count_smoking <- sinai_covid %>% 
+  group_by(facility) %>% 
+  count(smoking_status)
+
+ggplot(count_smoking, 
+       aes(x = smoking_status,
+           y = facility,
+           size = n)) +
+  geom_point()
+```
+
+---
+# Plotting 3 variables (cat-cat-num)
+
+```{r, out.width='40%', fig.align='center', message=FALSE, warning=FALSE}
+ggplot(count_smoking, 
+       aes(x = smoking_status, 
+           y = facility,
+           size = n, color = n)) +
+  geom_point()
+```
+
+---
+
+# Let's practice
+
+- Count the number of patients with chronic kidney disease (0 and 1 separately) per facility 
+- Plot the data using a dot plot, mapping the size of the dots to the chronic kidney disease status
+
+---
+
+# Another way
+
+```{r, out.width='40%', fig.align='center'}
+kd <- sinai_covid %>% 
+  group_by(facility) %>% 
+  count(chronic_kidney_disease)
+
+ggplot(kd, aes(x = facility, y = n, 
+               fill = chronic_kidney_disease)) +
+  geom_col()
+```
+
+chronic_kidney_disease must be a "categorical" variable
+
+---
+
+Let's treat the variable as factor
+
+```{r, out.width=400, out.height=400, fig.align='center'}
+ggplot(kd, aes(x = n, y = facility, 
+               fill = factor(chronic_kidney_disease))) +
+  geom_col()
+```
+
+---
+
+# Splitting the bars
+
+
+```{r, out.width=600, out.height=400, fig.align='center'}
+ggplot(kd, aes(x = n, y = facility, 
+           fill = factor(chronic_kidney_disease))) +
+  geom_col(position = position_dodge())
+```
+
+---
+
+# Adding titles
+
+```{r, eval=FALSE}
+ggplot(kd, 
+       aes(x = n, y = facility, 
+           fill = factor(chronic_kidney_disease))) +
+  geom_col(position = position_dodge()) +
+  labs(title = "Chronic kidney disease incidence per fcility",
+       x = "Number of patients",
+       y = "",
+       fill = "Chronic kidney disease (0 = no, 1 = yes)")
+```
+
+---
+```{r, echo=FALSE, out.width=700, out.height=500, fig.align='center'}
+ggplot(kd, 
+       aes(x = n, y = facility, fill = factor(chronic_kidney_disease))) +
+  geom_col(position = position_dodge()) +
+  labs(title = "Chronic kidney disease incidence per fcility",
+       x = "Number of patients",
+       y = "",
+       fill = "Chronic kidney disease (0 = no, 1 = yes)")
+```
+---
+
+# Let's practice!
+
+- Count the number of patients depending on their smoking status per ethnic group 
+- Represent the data on a column plot
+- Split each bar depending on the smoking status
+- Add a plot title, axis title and change the legend title to remove the underscores
+
+---
+
+# Scales
+
+```{r, out.width='50%', fig.align='center'}
+ggplot(sinai_covid, aes(x = systolic_bp, y = diastolic_bp, 
+           color = facility)) +
+  geom_point() +
+  scale_color_brewer(palette = 2)
+```
+
+---
+
+# Scales
+
+- Invert scale direction
+
+```{r, out.width='40%', fig.align='center'}
+ggplot(sinai_covid, aes(x = systolic_bp, y = diastolic_bp, 
+           color = facility)) +
+  geom_point() +
+  scale_color_brewer(palette = 3, direction = -1)
+```
+
+---
+
+- Using manual scale
+
+```{r, out.width='40%', fig.align='center'}
+ggplot(sinai_covid, 
+       aes(x = systolic_bp, y = diastolic_bp, 
+           color = facility)) +
+  geom_point() +
+  scale_color_manual(values = c("red", "blue","darkgreen",
+                                "orange", "pink"))
+```
+
+---
+
+- Using manual scale
+
+```{r, out.width='40%', fig.align='center'}
+ggplot(sinai_covid, 
+       aes(x = systolic_bp, y = diastolic_bp, 
+           color = facility)) +
+  geom_point() +
+  scale_color_manual(values = c("#eb4034", "#d19617", "#429642",
+                                "#31d5de","#3148de"))
+```
+
+
+Look for "html color picker" on Google browser
+
+---
+
+# themes
+
+```{r, out.width='40%', fig.align='center'}
+ggplot(sinai_covid, 
+       aes(x = systolic_bp, y = diastolic_bp, 
+           color = facility)) +
+  geom_point() +
+  theme_bw()
+```
+
+---
+
+```{r, out.width='40%', fig.align='center'}
+ggplot(kd, 
+       aes(x = facility, y = n, fill = factor(chronic_kidney_disease))) +
+  geom_col(position = position_dodge()) +
+  labs(title = "Chronic kidney disease incidence per fcility",
+       x = "",
+       y = "Number of patients",
+       fill = "Chronic kidney disease (0 = no, 1 = yes)") +
+  theme_bw(base_size = 12) +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 90)) 
+```
+
+---
+# Let's practice!
+
+- Count the number of patients depending on their smoking status per etnic group
+- Plot the data using vertical bars
+- Add a plot title, axis titles and modify the legend title if needed
+- Change the filling colors of the bars (use scale_fill_brewer or scale_fill_manual )
+- Explore the available themes and use one of them
+- Use the theme layer to modify the angle or size of the axis text if needed
+
+
+---
+.pull-left[<br><br><br><br><br><br><br>
+.center[
+# Thanks!
+]
+]
+
+.pull-right[<br><br><br><br>
+```{r,echo=FALSE,out.width='100%',fig.align='center'}
+knitr::include_graphics("img/thanks.png")
+```
+
+.pull-right[Ilustration by Allison Horst]
+]
