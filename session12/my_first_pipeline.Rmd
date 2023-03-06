@@ -1,0 +1,56 @@
+---
+title: "My first pipeline"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+# Import libraries 
+
+Load libraries and import data
+
+```{r}
+library(tidyverse)
+library(janitor)
+sinai_covid <- read_csv("sinai_covid.csv")
+sinai_covid <- clean_names(sinai_covid)
+```
+
+## Select columns
+
+Select columns and show a few lines
+
+```{r}
+sinai_covid %>% 
+  select(age, ethnicity, facility) %>% 
+  head()
+```
+
+## Plot
+
+Plot a histogram 
+
+```{r}
+ggplot(sinai_covid, aes(x = age, color = facility)) +
+  geom_line()
+```
+
+
+## Bullet lists
+
+- First element
++ Second element
+* Third element
+
+1. A number
+2. Another number
+
+1.1 A deep number
+1.2 A second number
+
+
+
+
+

@@ -1,0 +1,62 @@
+---
+title: "My first pipeline"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
+
+
+
+# Sinai covid analysis
+
+## Loading libraries and data
+
+```{r}
+library(tidyverse)
+library(janitor)
+sinai_covid <- read_csv("sinai_covid.csv")
+sinai_covid <- clean_names(sinai_covid)
+```
+
+```{r}
+head(sinai_covid[,1:3])
+```
+
+```{r}
+sinai_covid %>% 
+  select(age, ethnicity, facility) %>% 
+  head()
+```
+
+Create a histogram:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(sinai_covid, aes(x = age, fill = facility)) +
+  geom_histogram()
+```
+
+
+```{r, eval=FALSE}
+ggplot(sinai_covid, aes(x = age, y = facility, fill = facility)) +
+  geom_boxplot()
+```
+
+
+```{r, out.width='50%', fig.align='center', fig.alt= "A boxplot with the age in the x axis an the facility in the y axis." }
+ggplot(sinai_covid, aes(x = age, y = facility, fill = facility)) +
+  geom_boxplot()
+```
+
+## List
+
+1. One element
+2. Another one 
+3. A third one
+
+1.1. One element
+1.2. Another one 
+1.3. A third one
+
+
